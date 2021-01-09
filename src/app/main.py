@@ -1,3 +1,5 @@
+import os
+
 from elasticsearch import Elasticsearch
 from fastapi import FastAPI
 
@@ -15,5 +17,5 @@ def root():
 
 @app.post("/trending/")
 async def get_trending(text: Text):
-    er = ElasticsearchRetriever(Elasticsearch())
+    er = ElasticsearchRetriever(Elasticsearch(os.environ["HOST"]))
     return er.search(text.location)

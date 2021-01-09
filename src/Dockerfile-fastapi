@@ -1,0 +1,9 @@
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
+
+COPY app/requirements-docker.txt /tmp/
+RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements-docker.txt
+
+WORKDIR /app
+COPY ./app .
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
