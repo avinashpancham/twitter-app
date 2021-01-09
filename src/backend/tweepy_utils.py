@@ -5,7 +5,7 @@ from datetime import datetime
 from tweepy import API, OAuthHandler, Stream, StreamListener
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch()
+es = Elasticsearch(os.environ["HOST"])
 
 
 class CustomStreamListener(StreamListener):
