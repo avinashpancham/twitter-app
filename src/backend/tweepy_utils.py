@@ -32,11 +32,14 @@ class CustomStreamListener(StreamListener):
 
     @staticmethod
     def in_netherlands(data):
-        return (data["place"] and data["place"]["country_code"] == "NL") or (
-            data["user"]["location"]
-            and (
-                "netherlands" in data["user"]["location"].lower()
-                or "nederland" in data["user"]["location"].lower()
+        return "place" in data and (
+            (data["place"] and data["place"]["country_code"] == "NL")
+            or (
+                data["user"]["location"]
+                and (
+                    "netherlands" in data["user"]["location"].lower()
+                    or "nederland" in data["user"]["location"].lower()
+                )
             )
         )
 
