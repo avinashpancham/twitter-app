@@ -2,8 +2,10 @@ import logging
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
+from _typing import JsonType
 
-def store_data(data):
+
+def store_data(data: JsonType) -> None:
     es = Elasticsearch([{"host": "elasticsearch-1-vm", "port": 9200}])
     es_data = {
         "id": data["id"],
@@ -25,8 +27,7 @@ def store_data(data):
     logging.info(es_data)
 
 
-if __name__ == "__main__":
-    # For local testing
+def local_testing() -> None:
     es = Elasticsearch()
     if not es.indices.exists(index="tweets"):
         es.indices.create(index="tweets", ignore=400)
@@ -52,3 +53,7 @@ if __name__ == "__main__":
 
     response = es.search(index="tweets", body={"query": {"match_all": {}}})
     print(response)
+
+
+if __name__ == "__main__":
+    local_testing()

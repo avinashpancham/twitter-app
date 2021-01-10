@@ -1,16 +1,23 @@
+from typing import List
+
+from elasticsearch import Elasticsearch
+
+from _typing import JsonType
+
+
 class ElasticsearchRetriever:
-    def __init__(self, es):
+    def __init__(self, es: Elasticsearch) -> None:
         self.es = es
 
-    def search(self, location):
+    def search(self, location: str) -> JsonType:
         response = self.es.search(
             index="tweets",
             body={"size": 100, "query": {"match": {"location_name": location}}},
         )
-        return self.parse_response(response)
+        return {"response": self.parse_response(response)}
 
     @staticmethod
-    def parse_response(response):
+    def parse_response(response: JsonType) -> List[JsonType]:
         return [
             {
                 "text": tweet["_source"]["text"],
