@@ -2,7 +2,30 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 
 
+def store_data(data):
+    es = Elasticsearch([{"host": "elasticsearch-1-vm", "port": 9200}])
+    es_data = {
+        "id": data["id"],
+        "created_at": datetime.strptime(
+            data["created_at"], "%a %b %d %H:%M:%S +0000 %Y"
+        ),
+        "text": data["text"],
+        "hashtag": data["entities"]["hashtags"],
+        "user_id": data["user"]["id"],
+        "user_name": data["user"]["name"],
+        "lang": data["lang"],
+        "country": "NL",
+        "location_name": data["place"]["name"]
+        if data["place"]
+        else data["user"]["location"].split(",")[0].strip(),
+    }
+
+    es.index(index="tweets", body=es_data)
+    print(es_data)
+
+
 if __name__ == "__main__":
+    # For local testing
     es = Elasticsearch()
     if not es.indices.exists(index="tweets"):
         es.indices.create(index="tweets", ignore=400)

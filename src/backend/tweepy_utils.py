@@ -1,35 +1,12 @@
 import json
 import os
-from datetime import datetime
 
 from tweepy import API, OAuthHandler, Stream, StreamListener
-from elasticsearch import Elasticsearch
 
-es = Elasticsearch(os.environ["HOST"])
+from elasticsearch_utils import store_data
 
 
 class CustomStreamListener(StreamListener):
-    @staticmethod
-    def store_data(data):
-        es_data = {
-            "id": data["id"],
-            "created_at": datetime.strptime(
-                data["created_at"], "%a %b %d %H:%M:%S +0000 %Y"
-            ),
-            "text": data["text"],
-            "hashtag": data["entities"]["hashtags"],
-            "user_id": data["user"]["id"],
-            "user_name": data["user"]["name"],
-            "lang": data["lang"],
-            "country": "NL",
-            "location_name": data["place"]["name"]
-            if data["place"]
-            else data["user"]["location"].split(",")[0].strip(),
-        }
-
-        es.index(index="tweets", body=es_data)
-        print(es_data)
-
     @staticmethod
     def in_netherlands(data):
         return "place" in data and (
@@ -46,7 +23,7 @@ class CustomStreamListener(StreamListener):
     def on_data(self, data):
         data = json.loads(data)
         if "delete" not in data and self.in_netherlands(data):
-            self.store_data(data)
+            store_data(data)
 
         return True
 
