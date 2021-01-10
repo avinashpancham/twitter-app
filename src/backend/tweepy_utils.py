@@ -7,6 +7,24 @@ from _typing import JsonType
 from elasticsearch_utils import store_data
 
 
+class TwitterStreamer:
+    def __init__(self, listener: StreamListener, auth: OAuthHandler) -> None:
+        self.listener = listener
+        self.auth = auth
+        self.api = API(
+            self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True
+        )
+        self.stream = Stream(
+            auth=API(
+                self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True
+            ).auth,
+            listener=self.listener,
+        )
+
+    def sample(self) -> None:
+        return self.stream.sample()
+
+
 class CustomStreamListener(StreamListener):
     @staticmethod
     def in_netherlands(data: JsonType) -> bool:
@@ -32,24 +50,6 @@ class CustomStreamListener(StreamListener):
         return True
 
 
-class TwitterStreamer:
-    def __init__(self, listener: StreamListener, auth: OAuthHandler) -> None:
-        self.listener = listener
-        self.auth = auth
-        self.api = API(
-            self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True
-        )
-        self.stream = Stream(
-            auth=API(
-                self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True
-            ).auth,
-            listener=self.listener,
-        )
-
-    def sample(self) -> None:
-        return self.stream.sample()
-
-
 class Credentials:
     def __init__(self) -> None:
         self.auth = OAuthHandler(
@@ -61,7 +61,15 @@ class Credentials:
 
 
 def start_stream():
+    while True:
+        try:
+            streamer = set_up_stream()
+            streamer.sample()
+        except Exception:
+            continue
+
+
+def set_up_stream() -> TwitterStreamer:
     listener = CustomStreamListener()
     auth = Credentials()
-    streamer = TwitterStreamer(listener, auth.auth)
-    streamer.sample()
+    return TwitterStreamer(listener, auth.auth)
