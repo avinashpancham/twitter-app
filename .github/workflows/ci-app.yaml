@@ -2,7 +2,7 @@ name: Build and deploy app
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   check-for-changes:
     name: Check for changes in app

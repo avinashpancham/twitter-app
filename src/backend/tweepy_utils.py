@@ -3,12 +3,13 @@ import os
 
 from tweepy import API, OAuthHandler, Stream, StreamListener
 
+from _typing import JsonType
 from elasticsearch_utils import store_data
 
 
 class CustomStreamListener(StreamListener):
     @staticmethod
-    def in_netherlands(data):
+    def in_netherlands(data: JsonType) -> bool:
         return "place" in data and (
             (data["place"] and data["place"]["country_code"] == "NL")
             or (
@@ -20,19 +21,19 @@ class CustomStreamListener(StreamListener):
             )
         )
 
-    def on_data(self, data):
+    def on_data(self, data: str) -> bool:
         data = json.loads(data)
         if "delete" not in data and self.in_netherlands(data):
             store_data(data)
 
         return True
 
-    def on_error(self, status):
+    def on_error(self, status) -> bool:
         return True
 
 
 class TwitterStreamer:
-    def __init__(self, listener, auth):
+    def __init__(self, listener: StreamListener, auth: OAuthHandler) -> None:
         self.listener = listener
         self.auth = auth
         self.api = API(
@@ -45,12 +46,12 @@ class TwitterStreamer:
             listener=self.listener,
         )
 
-    def sample(self):
+    def sample(self) -> None:
         return self.stream.sample()
 
 
 class Credentials:
-    def __init__(self):
+    def __init__(self) -> None:
         self.auth = OAuthHandler(
             os.environ["CONSUMER_KEY"], os.environ["CONSUMER_SECRET"]
         )
