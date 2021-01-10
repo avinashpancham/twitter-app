@@ -4,7 +4,6 @@ from fastapi import FastAPI
 from elasticsearch_utils import ElasticsearchRetriever
 from models import Text
 
-
 app = FastAPI()
 
 
