@@ -1,10 +1,10 @@
 from python:3.9-slim-buster
 
-COPY backend/requirements.txt /tmp/
+COPY src/backend/requirements.txt /tmp/
 RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /backend
-COPY ./backend .
+COPY ./src/backend .
 
 CMD ["python3", "./main.py"]
 

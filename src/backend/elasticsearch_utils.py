@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
@@ -21,7 +22,7 @@ def store_data(data):
     }
 
     es.index(index="tweets", body=es_data)
-    print(es_data)
+    logging.info(es_data)
 
 
 if __name__ == "__main__":
