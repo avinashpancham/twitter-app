@@ -25,4 +25,3 @@ jobs:
         env:
           PROJECT_ID: "${{ secrets.PROJECT_ID }}"
         run: gcloud compute instances create-with-container api --container-image eu.gcr.io/${PROJECT_ID}/fastapi --zone "europe-west1-b" --container-privileged --container-restart-policy "always"
-        
