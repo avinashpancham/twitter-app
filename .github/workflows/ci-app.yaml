@@ -2,11 +2,11 @@ name: Build and deploy app
 on: push
 
 jobs:
-  check-for-chamges:
+  check-for-changes:
     name: Check for changes in app
     runs-on: ubuntu-latest
     outputs:
-      api: ${{ steps.filter.outputs.app }}
+      app: ${{ steps.filter.outputs.app }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,8 +20,9 @@ jobs:
 
   build-and-push-to-gcr:
     name: Redeploy app
+    needs: check-for-changes
+    if: ${{ needs.check-for-changes.outputs.app == 'true' }}
     runs-on: ubuntu-latest
-    if: ${{ needs.check-for-chamges.outputs.app == 'true' }}
     steps:
       - uses: actions/checkout@v2
       - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
