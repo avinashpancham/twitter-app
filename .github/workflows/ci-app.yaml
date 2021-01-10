@@ -1,6 +1,8 @@
 name: Build and deploy app
-on: push
-
+on:
+  push:
+    branches:
+      - master
 jobs:
   check-for-changes:
     name: Check for changes in app
