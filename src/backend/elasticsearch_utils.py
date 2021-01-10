@@ -1,8 +1,8 @@
 import logging
 from datetime import datetime
-from elasticsearch import Elasticsearch
 
 from _typing import JsonType
+from elasticsearch import Elasticsearch
 
 
 def store_data(data: JsonType) -> None:

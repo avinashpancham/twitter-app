@@ -1,10 +1,9 @@
 import json
 import os
 
-from tweepy import API, OAuthHandler, Stream, StreamListener
-
 from _typing import JsonType
 from elasticsearch_utils import store_data
+from tweepy import API, OAuthHandler, Stream, StreamListener
 
 
 class TwitterStreamer:
