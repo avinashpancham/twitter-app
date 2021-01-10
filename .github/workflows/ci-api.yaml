@@ -13,3 +13,12 @@ jobs:
           registry: eu.gcr.io
           project_id: ${{ secrets.PROJECT_ID }}
           image_name: fastapi
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+          service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          export_default_credentials: true
+
+      - name: Use gcloud CLI
+        run: gcloud info
