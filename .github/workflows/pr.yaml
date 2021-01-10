@@ -2,8 +2,8 @@ name: Linting
 
 on:
   pull_request:
-    branches:
-    - master
+  push:
+    branches: [main]
 
 jobs:
   super-lint:
