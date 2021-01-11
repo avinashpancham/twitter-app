@@ -142,3 +142,4 @@ cython_debug/
 .idea/
 .envrc
 .terraform
+data/

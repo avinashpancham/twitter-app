@@ -1,4 +1,5 @@
-from python:3.9-slim-buster
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
+# Use fastapi docker instead of python since it already has gcc
 
 COPY src/backend/requirements.txt /tmp/
 RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt
@@ -6,5 +7,6 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements
 WORKDIR /backend
 COPY ./src/backend .
 
+ENTRYPOINT []
 CMD ["python3", "./main.py"]
 

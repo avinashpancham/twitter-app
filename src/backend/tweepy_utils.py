@@ -1,10 +1,9 @@
 import json
 import os
 
-from tweepy import API, OAuthHandler, Stream, StreamListener
-
 from _typing import JsonType
-from elasticsearch_utils import store_data
+from elasticsearch_utils import process_and_store_data
+from tweepy import API, OAuthHandler, Stream, StreamListener
 
 
 class TwitterStreamer:
@@ -42,7 +41,7 @@ class CustomStreamListener(StreamListener):
     def on_data(self, data: str) -> bool:
         data = json.loads(data)
         if "delete" not in data and self.in_netherlands(data):
-            store_data(data)
+            process_and_store_data(data)
 
         return True
 

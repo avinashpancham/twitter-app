@@ -1,8 +1,7 @@
 from typing import List
 
-from elasticsearch import Elasticsearch
-
 from _typing import JsonType
+from elasticsearch import Elasticsearch
 
 
 class ElasticsearchRetriever:
